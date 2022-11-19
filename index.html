@@ -22,47 +22,287 @@
   <script>
     // 在 #app 标签下渲染一个按钮组件
     const app = Vue.createApp({
-      template: `   <van-collapse v-model="activeNames">
+      template: ` <van-collapse v-model="activeNames">
       <van-collapse-item v-for="(item, index) in dataList" :key="index" :title="item.name" :name="item.name">
         <van-cell v-for="(v, i) in item.children" :key="i" :title="v.name">
+          <div>
+            {{ v.price }}
+          </div>
           <van-stepper v-model="v.num" :min="0" :max="v.limit" />
         </van-cell>
       </van-collapse-item>
-    </van-collapse>`,
+    </van-collapse>
+    <van-button type="primary" style="width: 100%" @click="submit">
+      生成数据
+    </van-button>
+    <br />
+    <br />
+    {{res}}
+    <br />
+    <br />
+    `,
+      methods: {
+        submit() {
+          const result = [];
+          this.dataList.forEach((item) => {
+            const cn = item.children.map((v) => v.num);
+            if (cn.length && cn.filter((i) => i > 0).length) {
+              result.push(cn);
+            } else {
+              result.push(null);
+            }
+          });
+          this.copyToClipboard(JSON.stringify(result));
+          this.res = JSON.stringify(result);
+          vant.Toast("已复制到剪切版,若复制失败在下方手动复制");
+        },
+        copyToClipboard(code) {
+          const textAreaElement = document.createElement("textarea");
+          textAreaElement.value = code;
+          textAreaElement.setAttribute("readonly", "");
+          textAreaElement.style.position = "absolute";
+          textAreaElement.style.top = "-9999px";
+          document.body.appendChild(textAreaElement);
+          textAreaElement.select();
+          document.execCommand("copy");
+          document.body.removeChild(textAreaElement);
+        },
+      },
       data() {
         return {
+          res: "",
           activeNames: [],
           mpc: 5,
           dataList: [
             {
               name: "杨少雄",
               children: [
-                { name: "钢管X1--简易绷带x1", num: 0, limit: 1 },
-                { name: "割裂X1--简易绷带x30", num: 0, limit: 1 },
-                { name: "手枪精准射击X1--简易绷带x30", num: 0, limit: 1 },
+                { name: "钢管X1", price: "简易绷带x5", num: 0, limit: 1 },
+                { name: "割裂X1", price: "简易绷带x30", num: 0, limit: 1 },
+                {
+                  name: "手枪精准射击X1",
+                  price: "简易绷带x30",
+                  num: 0,
+                  limit: 1,
+                },
               ],
             },
             {
               name: "王酷",
               children: [
-                { name: "健身X1--兽筋x10", num: 0, limit: 1 },
-                { name: "抓捕X1--白蘑菇x10", num: 0, limit: 1 },
-                { name: "蓄力箭X1--兽筋x30", num: 0, limit: 1 },
+                { name: "健身X1", price: "兽筋x10", num: 0, limit: 1 },
+                { name: "抓捕X1", price: "白蘑菇x10", num: 0, limit: 1 },
+                { name: "蓄力箭X1", price: "兽筋x30", num: 0, limit: 1 },
               ],
             },
             {
               name: "周文远",
               children: [
-                { name: "刀具生产X1--野果x20", num: 0, limit: 1 },
-                { name: "防具生产X1--野果x40", num: 0, limit: 1 },
+                { name: "刀具生产X1", price: "野果x20", num: 0, limit: 1 },
+                { name: "防具生产X1", price: "野果x40", num: 0, limit: 1 },
               ],
             },
             {
               name: "吴建国",
               children: [
-                { name: "刀具生产X1--野果x20", num: 0, limit: 1 },
-                { name: "防具生产X1--价格40", num: 0, limit: 1 },
+                { name: "金属加工技巧X1", price: "塑料X5", num: 0, limit: 1 },
+                { name: "铁块X1", price: "塑料X10", num: 0, limit: 5 },
+                { name: "铁钉X1", price: "塑料X15", num: 0, limit: 5 },
+                { name: "机械零件X1", price: "塑料X10", num: 0, limit: 5 },
               ],
+            },
+            {
+              name: "萧老头",
+              children: [],
+            },
+            {
+              name: "吴倩",
+              children: [
+                { name: "瑜伽1X1", price: "肉干X10", num: 0, limit: 1 },
+                { name: "瑜伽2X1", price: "肉干X20", num: 0, limit: 1 },
+                { name: "瑜伽3X1", price: "蜜香南瓜X50", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "郑永信",
+              children: [
+                { name: "木工X1", price: "1牙X5", num: 0, limit: 1 },
+                { name: "弓制作X1", price: "1牙X5", num: 0, limit: 1 },
+                { name: "反应力1X1", price: "1牙X10", num: 0, limit: 1 },
+                { name: "硬木1X1", price: "1牙X10", num: 0, limit: 5 },
+                { name: "精加工木板X1", price: "1牙X10", num: 0, limit: 5 },
+              ],
+            },
+            {
+              name: "艾米丽",
+              children: [],
+            },
+            {
+              name: "赵德富",
+              children: [
+                { name: "野外烹饪大师X1", price: "耳朵X10", num: 0, limit: 1 },
+                { name: "大胃王X1", price: "香料X15", num: 0, limit: 1 },
+                { name: "酒X1", price: "耳朵X20", num: 0, limit: 1 },
+                { name: "香料1X1", price: "虾X1", num: 0, limit: 10 },
+                { name: "虾X1", price: "螃蟹X1", num: 0, limit: 10 },
+                { name: "精力旺盛1X1", price: "红土豆X20", num: 0, limit: 1 },
+                { name: "高级香料X2", price: "鱼X10", num: 0, limit: 5 },
+                { name: "河豚X2", price: "鱼X5", num: 0, limit: 5 },
+              ],
+            },
+            {
+              name: "王帅",
+              children: [
+                { name: "子弹制作", price: "1血X10", num: 0, limit: 1 },
+                { name: "快速撤退", price: "1血X10", num: 0, limit: 1 },
+                { name: "手枪制作", price: "1血X20", num: 0, limit: 1 },
+                { name: "步枪制作", price: "1血X30", num: 0, limit: 1 },
+                { name: "体能恢复", price: "1血X50", num: 0, limit: 1 },
+                { name: "步枪快速射击", price: "1血X50", num: 0, limit: 1 },
+                { name: "投掷物制作", price: "1血X50", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "李青云--这个建议自己手动换",
+              children: [
+                // { name: '活力因子1', price: '1血X10', num: 0, limit: 1 },
+                // { name: '大胃王2', price: '1血X10', num: 0, limit: 1 },
+                // { name: '精力旺盛2', price: '1血X20', num: 0, limit: 1 },
+                // { name: '反应力2', price: '1血X30', num: 0, limit: 1 },
+                // { name: '健身3', price: '1血X50', num: 0, limit: 1 },
+                // { name: '反应力3', price: '1血X50', num: 0, limit: 1 },
+                // { name: '田径健将', price: '1血X50', num: 0, limit: 1 },
+                // { name: '尼奥空手接白刃', price: '1血X50', num: 0, limit: 1 },
+                // { name: '格斗大师', price: '1血X50', num: 0, limit: 1 },
+                // { name: '弓箭精通', price: '1血X50', num: 0, limit: 1 },
+                // { name: '手枪精通', price: '1血X50', num: 0, limit: 1 },
+                // { name: '步枪精通', price: '1血X50', num: 0, limit: 1 },
+                // { name: '投掷武器精通', price: '1血X50', num: 0, limit: 1 },
+                // { name: '防御精通', price: '1血X50', num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "刘衍",
+              children: [
+                { name: "冲锋", price: "草X20", num: 0, limit: 1 },
+                { name: "固守", price: "宠物经验书X20", num: 0, limit: 1 },
+                { name: "撕裂", price: "玉米X20", num: 0, limit: 1 },
+                { name: "强攻", price: "宠物经验书X20", num: 0, limit: 1 },
+                // { name: '猎人之心', price: '1血X50', num: 0, limit: 1 },
+                // { name: '撕裂', price: '1血X50', num: 0, limit: 1 },
+                // { name: '横扫', price: '1血X50', num: 0, limit: 1 },
+                // { name: '殊死一击', price: '1血X50', num: 0, limit: 1 },
+                // { name: '浴血', price: '1血X50', num: 0, limit: 1 },
+                // { name: '固守', price: '1血X50', num: 0, limit: 1 },
+                // { name: '强攻', price: '1血X50', num: 0, limit: 1 },
+                // { name: '闪躲', price: '1血X50', num: 0, limit: 1 },
+                // { name: '敏锐', price: '1血X50', num: 0, limit: 1 },
+                // { name: '嗜血', price: '1血X50', num: 0, limit: 1 },
+                // { name: '狂暴', price: '1血X50', num: 0, limit: 1 },
+                // { name: '献祭', price: '1血X50', num: 0, limit: 1 },
+                // { name: '助战', price: '1血X50', num: 0, limit: 1 },
+                // { name: '协防', price: '1血X50', num: 0, limit: 1 },
+                // { name: '', price: '1血X50', num: 0, limit: 1 },
+                // { name: '助战', price: '1血X50', num: 0, limit: 1 },
+                // { name: '助战', price: '1血X50', num: 0, limit: 1 },
+                // { name: '助战', price: '1血X50', num: 0, limit: 1 },
+                // { name: '助战', price: '1血X50', num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "杨一心",
+              children: [
+                { name: "酒精", price: "肉X5", num: 0, limit: 30 },
+                { name: "塑料瓶", price: "肉X1", num: 0, limit: 20 },
+                { name: "农作物种植", price: "肉X15", num: 0, limit: 1 },
+                { name: "玉米种子X5", price: "肉X10", num: 0, limit: 30 },
+                { name: "土制猎枪", price: "肉X20", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "萧老头",
+              children: [],
+            },
+            {
+              name: "G教授",
+              children: [
+                { name: "酒", price: "蛇血X1", num: 0, limit: 2 },
+                { name: "工具钢", price: "蛇血X1", num: 0, limit: 5 },
+                { name: "高性能纤维", price: "蛇血X3", num: 0, limit: 5 },
+                { name: "优质硬木", price: "蛇血X3", num: 0, limit: 5 },
+                { name: "高级塑料", price: "蛇血X3", num: 0, limit: 5 },
+              ],
+            },
+            {
+              name: "楚毅",
+              children: [
+                { name: "火药", price: "2血X1", num: 0, limit: 30 },
+                { name: "矿石X2", price: "2牙X1", num: 0, limit: 20 },
+                { name: "钢", price: "2血X1", num: 0, limit: 20 },
+                { name: "铅块", price: "1血X1", num: 0, limit: 20 },
+                { name: "钢管", price: "2牙X2", num: 0, limit: 5 },
+                { name: "工具钢", price: "2血X18", num: 0, limit: 5 },
+                { name: "手枪配件", price: "2血X10", num: 0, limit: 5 },
+                { name: "爆头", price: "2血X10", num: 0, limit: 1 },
+                { name: "步枪配件", price: "2血X15", num: 0, limit: 5 },
+              ],
+            },
+            {
+              name: "张博",
+              children: [],
+            },
+            {
+              name: "赵云飞",
+              children: [],
+            },
+            {
+              name: "卓一航",
+              children: [],
+            },
+            {
+              name: "王轩",
+              children: [],
+            },
+            {
+              name: "刘文",
+              children: [],
+            },
+            {
+              name: "镰刀",
+              children: [],
+            },
+            {
+              name: "老鼠",
+              children: [],
+            },
+            {
+              name: "朱天启",
+              children: [],
+            },
+            {
+              name: "鬣狗",
+              children: [],
+            },
+            {
+              name: "李芸",
+              children: [],
+            },
+            {
+              name: "山鸡",
+              children: [],
+            },
+            {
+              name: "李少尉",
+              children: [
+                { name: "防碎", price: "耳朵X10", num: 0, limit: 1 },
+                { name: "武碎", price: "耳朵X20", num: 0, limit: 2 },
+                { name: "防碎", price: "3牙X5", num: 0, limit: 2 },
+                { name: "武碎", price: "3血X5", num: 0, limit: 2 },
+              ],
+            },
+            {
+              name: "沈灵",
+              children: [],
             },
           ],
         };
