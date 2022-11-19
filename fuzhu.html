@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://fastly.jsdelivr.net/npm/vant@3/lib/index.css"
+    />
+  </head>
+  <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+  <script src="https://fastly.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://fastly.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+
+  <body>
+    <div id="app"></div>
+    <div v-for="ite"></div>
+  </body>
+
+  <script>
+    // 在 #app 标签下渲染一个按钮组件
+    const app = Vue.createApp({
+      template: `   <van-collapse v-model="activeNames">
+      <van-collapse-item v-for="(item, index) in dataList" :key="index" :title="item.name" :name="item.name">
+        <van-cell v-for="(v, i) in item.children" :key="i" :title="v.name">
+          <van-stepper v-model="v.num" :min="0" :max="v.limit" />
+        </van-cell>
+      </van-collapse-item>
+    </van-collapse>`,
+      data() {
+        return {
+          activeNames: [],
+          mpc: 5,
+          dataList: [
+            {
+              name: "杨少雄",
+              children: [
+                { name: "钢管X1--简易绷带x1", num: 0, limit: 1 },
+                { name: "割裂X1--简易绷带x30", num: 0, limit: 1 },
+                { name: "手枪精准射击X1--简易绷带x30", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "王酷",
+              children: [
+                { name: "健身X1--兽筋x10", num: 0, limit: 1 },
+                { name: "抓捕X1--白蘑菇x10", num: 0, limit: 1 },
+                { name: "蓄力箭X1--兽筋x30", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "周文远",
+              children: [
+                { name: "刀具生产X1--野果x20", num: 0, limit: 1 },
+                { name: "防具生产X1--野果x40", num: 0, limit: 1 },
+              ],
+            },
+            {
+              name: "吴建国",
+              children: [
+                { name: "刀具生产X1--野果x20", num: 0, limit: 1 },
+                { name: "防具生产X1--价格40", num: 0, limit: 1 },
+              ],
+            },
+          ],
+        };
+      },
+    });
+    app.use(vant);
+    app.mount("#app");
+  </script>
+</html>
